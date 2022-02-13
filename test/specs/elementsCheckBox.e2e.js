@@ -9,10 +9,10 @@ describe('Click on every checkbox', () => {
     it('should click on checkboxes (set checked)- Desktop, Documents, Downloads', async () => {
         await CheckBoxPage.open();
         await CheckBoxPage.toggleButton.click();
-        // await CheckBoxPage.checkBoxDesktop.click();
-        // await CheckBoxPage.checkBoxDocuments.click();
-        // await CheckBoxPage.checkBoxDownloads.click();
 
+        /** next forEach() method not recommended to use with async-await
+         * https://gist.github.com/joeytwiddle/37d2085425c049629b80956d3c618971
+         * */
         await CheckBoxPage.expandedCheckboxes.forEach( (elem) => {
             elem.$('label').click();
         });
@@ -21,13 +21,11 @@ describe('Click on every checkbox', () => {
         await expect(CheckBoxPage.checkBoxResult).toHaveTextContaining('downloads');
     });
     it('should click on checkboxes (set unchecked)- Desktop, Documents, Downloads', async () => {
-        await CheckBoxPage.expandedCheckboxes.forEach(( elem) => {
-            return elem.$('label').click();
-        })
-
-        // await CheckBoxPage.checkBoxDesktop.click();
-        // await CheckBoxPage.checkBoxDocuments.click();
-        // await CheckBoxPage.checkBoxDownloads.click();
+        /** instead of forEach() method recommended use for loop with async-await*/
+        for( const elem of await CheckBoxPage.expandedCheckboxes)
+        {
+            await elem.$('label').click();
+        }
         await expect(CheckBoxPage.checkBoxResult).not.toBeExisting();
     });
     it('should click on main checkbox (set checked Home) - Desktop, Documents, Downloads', async () => {

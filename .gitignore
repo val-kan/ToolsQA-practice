@@ -2,3 +2,7 @@
 /allure-results/
 /allure-report/
 /.idea/
+package-lock.json
+package.json
+README.md
+wdio.conf.js

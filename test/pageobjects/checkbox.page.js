@@ -66,7 +66,6 @@ class CheckBoxPage extends Page {
         await this.inputPassword.setValue(password);
         await this.btnSubmit.click();
     }
-
     /**
      * overwrite specific options to adapt it to page object
      */

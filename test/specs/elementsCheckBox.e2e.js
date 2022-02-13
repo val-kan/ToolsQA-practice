@@ -13,7 +13,7 @@ describe('Click on every checkbox', () => {
         /** next forEach() method not recommended to use with async-await
          * https://gist.github.com/joeytwiddle/37d2085425c049629b80956d3c618971
          * */
-        await CheckBoxPage.expandedCheckboxes.forEach( (elem) => {
+        await CheckBoxPage.expandedCheckboxes.forEach((elem) => {
             elem.$('label').click();
         });
         await expect(CheckBoxPage.checkBoxResult).toHaveTextContaining('desktop');
@@ -22,8 +22,7 @@ describe('Click on every checkbox', () => {
     });
     it('should click on checkboxes (set unchecked)- Desktop, Documents, Downloads', async () => {
         /** instead of forEach() method recommended use for loop with async-await*/
-        for( const elem of await CheckBoxPage.expandedCheckboxes)
-        {
+        for (const elem of await CheckBoxPage.expandedCheckboxes) {
             await elem.$('label').click();
         }
         await expect(CheckBoxPage.checkBoxResult).not.toBeExisting();
@@ -81,6 +80,18 @@ describe('Click on every checkbox', () => {
         await CheckBoxPage.checkBoxNotes.click()
         await CheckBoxPage.checkBoxCommands.click()
         await expect(CheckBoxPage.checkBoxResult).not.toBeExisting();
+    });
+    it('verify user can expand all checkboxes', async () => {
+        await CheckBoxPage.expandAllButton.click();
+        await expect(CheckBoxPage.checkBoxAngular).toBeExisting()
+        await expect(CheckBoxPage.checkBoxReact).toBeExisting()
+        await expect(CheckBoxPage.checkBoxVeu).toBeExisting()
+    });
+    it('verify user can collapse all checkboxes', async () => {
+        await CheckBoxPage.collapseAllButton.click();
+        await expect(CheckBoxPage.checkBoxAngular).not.toBeExisting()
+        await expect(CheckBoxPage.checkBoxReact).not.toBeExisting()
+        await expect(CheckBoxPage.checkBoxVeu).not.toBeExisting()
     });
 
 });

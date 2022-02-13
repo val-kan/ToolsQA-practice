@@ -18,6 +18,10 @@ class CheckBoxPage extends Page {
         return $('button[title="Expand all"]');
     }
 
+    get collapseAllButton() {
+        return $('button[title="Collapse all"]');
+    }
+
     get checkBoxHome() {
         return $('label[for="tree-node-home"]');
     }
@@ -56,6 +60,15 @@ class CheckBoxPage extends Page {
 
     get checkBoxCommands() {
         return $('label[for="tree-node-commands"]');
+    }
+    get checkBoxReact() {
+        return this.mainCheckbox.$('span>label[for="tree-node-react"]');
+    }
+    get checkBoxAngular() {
+        return this.mainCheckbox.$('span>label[for="tree-node-angular"]');
+    }
+    get checkBoxVeu() {
+        return this.mainCheckbox.$('span>label[for="tree-node-veu"]');
     }
     /**
      * a method to encapsule automation code to interact with the page

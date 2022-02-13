@@ -9,7 +9,6 @@ describe('Click on every checkbox', () => {
     it('should click on checkboxes (set checked)- Desktop, Documents, Downloads', async () => {
         await CheckBoxPage.open();
         await CheckBoxPage.toggleButton.click();
-
         /** next forEach() method not recommended to use with async-await
          * https://gist.github.com/joeytwiddle/37d2085425c049629b80956d3c618971
          * */

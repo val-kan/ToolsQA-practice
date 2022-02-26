@@ -1,4 +1,6 @@
 const CheckBoxPage = require('../pageobjects/checkbox.page');
+const UploadDownloadPage = require('../pageobjects/uploaddownload.page');
+
 before('maximize browser', async () => {
     await browser.maximizeWindow();
     await CheckBoxPage.open();
@@ -97,3 +99,24 @@ describe('Click on every checkbox', () => {
 });
 
 
+describe('Click on every checkbox', () => {
+    before('maximize browser', async () => {
+        await browser.maximizeWindow();
+        await UploadDownloadPage.open();
+    });
+
+    it('should upload a file', async () => {
+        const fileName = 'dummy.png'
+        const fileLocation = 'resources/';
+        const remoteFilePath = await browser.uploadFile(fileLocation+fileName)
+
+        await UploadDownloadPage.buttonChooseFile.setValue(remoteFilePath);
+        const file = await UploadDownloadPage.labelUploadedFile.getText()
+        expect(file).toHaveTextContaining(fileName);
+    });
+    it('should download a file', async () => {
+        await UploadDownloadPage.buttonDownload.click();
+        const downloadHref =await  UploadDownloadPage.buttonDownload.getAttribute('href')
+
+    });
+});

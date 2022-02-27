@@ -2,7 +2,10 @@ const Page = require('../pageobjects/page')
 const TextBoxPage = require('../pageobjects/textbox.page');
 const CheckBoxPage = require('../pageobjects/checkbox.page');
 const UploadDownloadPage = require('../pageobjects/uploaddownload.page');
+const RadioButtonPage = require('../pageobjects/radiobutton.page');
+
 const Elements = require('../pageobjects/elements.page')
+
 const Side = require('../pageobjects/sidebarmenu');
 const side = new Side();
 
@@ -11,8 +14,8 @@ before('maximize browser', async () => {
     await Elements.open();
 });
 
-describe('[ Menu - Text Box ]', () => {
-    it('User is able to open Text Box elements page', async () => {
+describe.skip('[ Menu - Text Box ]', () => {
+    it('Verify user is landed on Text Box elements page', async () => {
         await Elements.sideBarMenu.openTextBoxPage();
         await expect(TextBoxPage.mainHeader).toHaveTextContaining('Text Box');
     });
@@ -72,7 +75,7 @@ describe('[ Menu - Text Box ]', () => {
     });
     it('Custom test - cleaning textarea using browser.keys (keyboard keys)', async () => {
         await TextBoxPage.textareaPermanentAddress.setValue('text');
-        await browser.keys(['Control','a']);
+        await browser.keys(['Control', 'a']);
         await browser.keys('Delete');
         await expect(await TextBoxPage.textareaPermanentAddress.getValue()).toEqual('');
     });
@@ -185,6 +188,36 @@ describe.skip('[ Menu - Check Box ]', () => {
         await expect(CheckBoxPage.checkBoxVeu).not.toBeExisting()
     });
 
+});
+
+describe('[ Menu - Radio Button ]', () => {
+    it('Verify user landed on Radio Button page', async () => {
+        await Elements.sideBarMenu.openRadioButtonPage();
+        await expect(RadioButtonPage.mainHeader).toHaveTextContaining('Radio Button');
+    });
+    it('User can select radio button [Yes] - selection', async () => {
+        await RadioButtonPage.labelForYesRadio.click();
+        await expect(await RadioButtonPage.radioForYesRadio).toBeSelected();
+    });
+
+    it('User can select radio button [Impressive] using label', async () => {
+        await RadioButtonPage.labelForImpressiveRadio.click();
+        await expect(await RadioButtonPage.radioForYesRadio).not.toBeSelected();
+        await expect(await RadioButtonPage.radioForImpressiveRadio).toBeSelected();
+    });
+    it('User can select radio button [Impressive] using label', async () => {
+        await RadioButtonPage.labelForNoRadio.click();
+        await expect(await RadioButtonPage.radioForNoRadio).toHaveAttribute('disabled');
+        await expect(await RadioButtonPage.radioForNoRadio).not.toBeSelected();
+    });
+    it('User can select radio button [Yes] - result label', async () => {
+        await RadioButtonPage.labelForYesRadio.click();
+        await expect(await RadioButtonPage.resultLabel).toHaveTextContaining('You have selected Yes');
+    });
+    it('User can select radio button [Impressive] - result label', async () => {
+        await RadioButtonPage.labelForImpressiveRadio.click();
+        await expect(await RadioButtonPage.resultLabel).toHaveTextContaining('You have selected Impressive');
+    });
 });
 
 

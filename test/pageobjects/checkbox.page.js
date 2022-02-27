@@ -1,6 +1,9 @@
 const Page = require('./page');
-
+const SideBarMenu = require('../pageobjects/sidebarmenu');
 class CheckBoxPage extends Page {
+    get sideBarMenu() {
+        return new SideBarMenu();
+    }
 
     get mainCheckbox() {
         return $('ol>li');

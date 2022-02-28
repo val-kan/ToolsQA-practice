@@ -3,8 +3,8 @@ const TextBoxPage = require('../pageobjects/textbox.page');
 const CheckBoxPage = require('../pageobjects/checkbox.page');
 const UploadDownloadPage = require('../pageobjects/uploaddownload.page');
 const RadioButtonPage = require('../pageobjects/radiobutton.page');
-
-const Elements = require('../pageobjects/elements.page')
+const WebTablesPage = require('../pageobjects/webtables.page');
+const Elements = require('../pageobjects/elements.page');
 
 const Side = require('../pageobjects/sidebarmenu');
 const side = new Side();
@@ -190,7 +190,7 @@ describe.skip('[ Menu - Check Box ]', () => {
 
 });
 
-describe('[ Menu - Radio Button ]', () => {
+describe.skip('[ Menu - Radio Button ]', () => {
     it('Verify user landed on Radio Button page', async () => {
         await Elements.sideBarMenu.openRadioButtonPage();
         await expect(RadioButtonPage.mainHeader).toHaveTextContaining('Radio Button');
@@ -218,6 +218,21 @@ describe('[ Menu - Radio Button ]', () => {
         await RadioButtonPage.labelForImpressiveRadio.click();
         await expect(await RadioButtonPage.resultLabel).toHaveTextContaining('You have selected Impressive');
     });
+});
+describe('[ Menu - Web Tables ]', () => {
+    const tableHeaderRow=[];
+    it('Verify user landed on Web Tables page', async () => {
+        await Elements.sideBarMenu.openWebTablesPage();
+        await expect(WebTablesPage.mainHeader).toHaveTextContaining('Web Tables');
+    });
+    it('Verify table contains header row', async () => {
+        const expectedResult = ['First Name','Last Name','Age','Email','Salary','Department','Action']
+        for (const elem of await WebTablesPage.tableHeader.$$('div>div[role=columnheader]')) {
+            tableHeaderRow.push(await elem.getText());
+        }
+        await expect(tableHeaderRow).toEqual(expectedResult);
+    });
+
 });
 
 

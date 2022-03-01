@@ -22,6 +22,22 @@ class WebTablesPage extends Page {
     get tableHeaderColumnName(){
         return this.tableHeader.$$('div>div[role=columnheader]')
     }
+    get tableBody(){
+        return $('div.rt-tbody');
+    }
+    get tableAllRows(){
+        return $$('div.rt-tbody>div[role=rowgroup]');
+    }
+    get tableAllEmptyRows(){
+        return $$('div.rt-tr-group>div.rt-tr.-padRow');
+    }
+    get modalContentForm(){
+        return $('div.modal-content');
+    }
+    get modalTitle(){
+        return $('div#registration-form-modal');
+    }
+
     open() {
         return super.open('webtables');
     }

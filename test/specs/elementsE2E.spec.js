@@ -232,7 +232,22 @@ describe('[ Menu - Web Tables ]', () => {
         }
         await expect(tableHeaderRow).toEqual(expectedResult);
     });
-
+    it('User is able to invoke Registration Form', async () => {
+        await WebTablesPage.buttonAdd.click();
+        await expect(await WebTablesPage.modalTitle).toHaveText('Registration Form');
+    });
+    it('User is able to add new record in to the table', async () => {
+        const filledRowsAmount1= (await WebTablesPage.tableAllRows.length)-(await WebTablesPage.tableAllEmptyRows.length);
+        await $('#firstName').setValue('Joe');
+        await $('#lastName').setValue('Peck');
+        await $('#userEmail').setValue('Joe@peck.com');
+        await $('#age').setValue('25');
+        await $('#salary').setValue('15000');
+        await $('#department').setValue('Quality Assurance');
+        await $('button#submit').click();
+        const filledRowsAmount2 = (await WebTablesPage.tableAllRows.length)-(await WebTablesPage.tableAllEmptyRows.length);
+        await expect(filledRowsAmount2-filledRowsAmount1).toEqual(1);
+    });
 });
 
 

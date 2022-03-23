@@ -1,3 +1,4 @@
+const TextBoxPage = require("../pageobjects/textbox.page");
 module.exports = class SideBarMenu {
 
     get elementsMenuItem() {
@@ -25,7 +26,7 @@ module.exports = class SideBarMenu {
     }
 
     get linksElementsMenuItem() {
-        return $('//li/span[contains(text(),"Links")]');
+        return $('(//li/span[contains(text(),"Links")])[1]');
     }
 
     get brokenLinksImagesElementsMenuItem() {
@@ -68,11 +69,13 @@ module.exports = class SideBarMenu {
 
     async openLinksPage() {
         await this.elementsMenuItem.click();
+        await this.linksElementsMenuItem.scrollIntoView();
         await this.linksElementsMenuItem.click();
     }
 
     async openBrokenLinksPage() {
         await this.elementsMenuItem.click();
+        await this.brokenLinksImagesElementsMenuItem.scrollIntoView();
         await this.brokenLinksImagesElementsMenuItem.click();
     }
 

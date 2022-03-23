@@ -1,20 +1,24 @@
 const Page = require('../pageobjects/page')
+const MainPage = require('../pageobjects/main.page')
 const TextBoxPage = require('../pageobjects/textbox.page');
 const CheckBoxPage = require('../pageobjects/checkbox.page');
 const UploadDownloadPage = require('../pageobjects/uploaddownload.page');
 const RadioButtonPage = require('../pageobjects/radiobutton.page');
 const WebTablesPage = require('../pageobjects/webtables.page');
 const Elements = require('../pageobjects/elements.page');
+const Links = require('../pageobjects/links.page')
+const BrokenLinksImages = require('../pageobjects/brokenlinks.page')
+const fetch = require('node-fetch');
+const expectChai = require('chai').expect;
 
-const Side = require('../pageobjects/sidebarmenu');
-const side = new Side();
+
 
 before('maximize browser', async () => {
     await browser.maximizeWindow();
     await Elements.open();
 });
 
-describe.skip('[ Menu - Text Box ]', () => {
+describe('[ Menu - Text Box ]', () => {
     it('Verify user is landed on Text Box elements page', async () => {
         await Elements.sideBarMenu.openTextBoxPage();
         await expect(TextBoxPage.mainHeader).toHaveTextContaining('Text Box');
@@ -98,7 +102,7 @@ describe.skip('[ Menu - Text Box ]', () => {
         await expect(TextBoxPage.inputEmail).toHaveAttributeContaining('class', 'field-error')
     });
 });
-describe.skip('[ Menu - Check Box ]', () => {
+describe('[ Menu - Check Box ]', () => {
 
     it('User is able to click on checkboxes (set checked)- Desktop, Documents, Downloads', async () => {
         await CheckBoxPage.open();
@@ -190,7 +194,7 @@ describe.skip('[ Menu - Check Box ]', () => {
 
 });
 
-describe.skip('[ Menu - Radio Button ]', () => {
+describe('[ Menu - Radio Button ]', () => {
     it('Verify user landed on Radio Button page', async () => {
         await Elements.sideBarMenu.openRadioButtonPage();
         await expect(RadioButtonPage.mainHeader).toHaveTextContaining('Radio Button');
@@ -219,14 +223,14 @@ describe.skip('[ Menu - Radio Button ]', () => {
         await expect(await RadioButtonPage.resultLabel).toHaveTextContaining('You have selected Impressive');
     });
 });
-describe('[ Menu - Web Tables ]', () => {
-    const tableHeaderRow=[];
+describe.skip('!!! need to update [ Menu - Web Tables ]', () => {
+    const tableHeaderRow = [];
     it('Verify user landed on Web Tables page', async () => {
         await Elements.sideBarMenu.openWebTablesPage();
         await expect(WebTablesPage.mainHeader).toHaveTextContaining('Web Tables');
     });
     it('Verify table contains header row', async () => {
-        const expectedResult = ['First Name','Last Name','Age','Email','Salary','Department','Action']
+        const expectedResult = ['First Name', 'Last Name', 'Age', 'Email', 'Salary', 'Department', 'Action']
         for (const elem of await WebTablesPage.tableHeader.$$('div>div[role=columnheader]')) {
             tableHeaderRow.push(await elem.getText());
         }
@@ -237,7 +241,7 @@ describe('[ Menu - Web Tables ]', () => {
         await expect(await WebTablesPage.modalTitle).toHaveText('Registration Form');
     });
     it('User is able to add new record in to the table', async () => {
-        const filledRowsAmount1= (await WebTablesPage.tableAllRows.length)-(await WebTablesPage.tableAllEmptyRows.length);
+        const filledRowsAmount1 = (await WebTablesPage.tableAllRows.length) - (await WebTablesPage.tableAllEmptyRows.length);
         await $('#firstName').setValue('Joe');
         await $('#lastName').setValue('Peck');
         await $('#userEmail').setValue('Joe@peck.com');
@@ -245,8 +249,8 @@ describe('[ Menu - Web Tables ]', () => {
         await $('#salary').setValue('15000');
         await $('#department').setValue('Quality Assurance');
         await $('button#submit').click();
-        const filledRowsAmount2 = (await WebTablesPage.tableAllRows.length)-(await WebTablesPage.tableAllEmptyRows.length);
-        await expect(filledRowsAmount2-filledRowsAmount1).toEqual(1);
+        const filledRowsAmount2 = (await WebTablesPage.tableAllRows.length) - (await WebTablesPage.tableAllEmptyRows.length);
+        await expect(filledRowsAmount2 - filledRowsAmount1).toEqual(1);
     });
 });
 
@@ -266,5 +270,76 @@ describe.skip('[ Menu - Upload and Download ]', () => {
     it('User is able to download a file', async () => {
         await UploadDownloadPage.buttonDownload.click();
         const downloadHref = await UploadDownloadPage.buttonDownload.getAttribute('href')
+    });
+
+});
+describe('[ Menu - Links ]', () => {
+
+    it('Verify user landed on Links page', async () => {
+        await Links.sideBarMenu.openLinksPage();
+        await expect(Links.mainHeader).toHaveTextContaining('Links');
+    });
+    it('Verify simple link "Home" opens and lands on https://demoqa.com in new tab', async () => {
+        await Links.linkHome.click();
+        await browser.pause(500);    /** use this code if the test fail with a message :"Malformed type for "handle" parameter of command switchToWindow" */
+        const handles = await browser.getWindowHandles(); /** get opened browser tabs*/
+        //console.log('===>', handles,handles.length);
+        await browser.switchToWindow(handles[1]); /** switch into the second browser tab */
+        expect(await browser.getUrl()).not.toEqual('https://demoqa.com/links');
+        expect(await browser.getUrl()).toEqual('https://demoqa.com/');
+        await browser.closeWindow(); /** close opened/active tab  */
+        await browser.switchToWindow(handles[0]); /** get back to the previous tab/page */
+    });
+    it('Verify simple link "Home ZTHbs" opens and lands on https://demoqa.com in new tab', async () => {
+        await Links.linkHome.click();
+        await browser.pause(500);    /** use this code if the test fail with a message :"Malformed type for "handle" parameter of command switchToWindow" */
+        const handles = await browser.getWindowHandles(); /** get opened browser tabs*/
+        //console.log('===>', handles,handles.length);
+        await browser.switchToWindow(handles[1]); /** switch into the second browser tab */
+        expect(await browser.getUrl()).not.toEqual('https://demoqa.com/links');
+        expect(await browser.getUrl()).toEqual('https://demoqa.com/');
+        await browser.closeWindow(); /** close opened/active tab  */
+        await browser.switchToWindow(handles[0]); /** get back to the previous tab/page */
+    });
+});
+describe('[ Menu - Broken Links-Images ]', () => {
+
+    it('Verify user landed on BrokenLinks-Images page', async () => {
+        await BrokenLinksImages.sideBarMenu.openBrokenLinksPage();
+        await expect( BrokenLinksImages.mainHeader).toHaveTextContaining('Broken Links - Images');
+    });
+    it('Verify Valid link opens and lands on https://demoqa.com in the same tab', async () => {
+        await BrokenLinksImages.linkValid.click();
+        expect(await browser.getUrl()).not.toEqual('https://demoqa.com/broken');
+        expect(await browser.getUrl()).toEqual('https://demoqa.com/');
+    });
+    it('Verify Broken link opens and lands on Status Codes page', async () => {
+        await browser.back();
+        console.log('===>', await browser.getUrl().toString())
+        await BrokenLinksImages.linkBroken.scrollIntoView();
+        await BrokenLinksImages.linkBroken.click();
+        expect(await browser.getUrl()).not.toEqual('https://demoqa.com/broken');
+        await browser.back();
+    });
+    it('Verify the valid link gets a response code below 400', async () => {
+        const link = await BrokenLinksImages.linkValid;
+        const url =  await link.getAttribute('href');
+        const request =  fetch(url);
+        const response = await  request;
+        const statusCode = response.status;
+        expectChai(statusCode).to.be.below(400);
+    });
+    it('Verify the broken link is invalid/broken', async () => {
+        const link = await BrokenLinksImages.linkBroken;
+        const url =  await link.getAttribute('href');
+        const request =  fetch(url);
+        const response = await  request;
+        const statusCode = response.status;
+
+        /** depends on what we should verify - link is broken or not?*/
+        expectChai(statusCode).to.be.above(400);
+        //or
+        //expectChai(statusCode).to.be.below(400);
+        //expectChai(statusCode).to.be.above(400);
     });
 });

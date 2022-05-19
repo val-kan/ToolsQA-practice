@@ -17,14 +17,30 @@ jobs:
     strategy:
       matrix:
         node-version: [12.x, 14.x, 16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
+    
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm install
-    - run: npm test
+    
+    - name: Install dependencies
+      run: npm install --no-package-lock
+
+    - name: Test
+      run: npm test
+      
+    - name: Create test summary
+      uses: test-summary/action@v1.0
+      with:
+        paths: test-results.xml
+      if: always()
+      
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v1
+      if: always()
+      with:
+        files: "test-results.xml"

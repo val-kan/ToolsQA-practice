@@ -11,6 +11,7 @@ const BrokenLinksImages = require('../pageobjects/brokenlinks.page')
 const fetch = require('node-fetch');
 const expectChai = require('chai').expect;
 
+const myfaker = require('../../helper/fakeData');
 
 
 before('maximize browser', async () => {
@@ -341,5 +342,9 @@ describe('[ Menu - Broken Links-Images ]', () => {
         //or
         //expectChai(statusCode).to.be.below(400);
         //expectChai(statusCode).to.be.above(400);
+        console.log('=====>', myfaker.name)
+        console.log('=====>', myfaker.name)
+        console.log('=====>', myfaker.name)
+
     });
 });
